@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Installing required packages
+      command: yum install -y sssd samba ntp ntp-doc krb5* nfs-utils pam_krb5 bind-utils net-tools samba4-winbind-clients
+ 

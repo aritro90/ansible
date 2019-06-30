@@ -1,0 +1,35 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: updating onboot to yes
+      replace:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth0
+        regexp: '^ONBOOT=no'
+        replace: 'ONBOOT=yes'
+    - name: settting bootproto to static
+      replace:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth0
+        regexp: '^BOOTPROTO=dhcp'
+        replace: 'BOOTPROTO=static'
+    - name: configuring network
+      blockinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+        block: |
+         IPADDR=10.136.101.143
+         NETMASK=255.255.255.0
+         GATEWAY=10.136.101.1
+         DOMAIN=got.com
+         DNS1=10.136.101.234
+    - name: restart network service
+      systemd:
+        state: restarted
+        daemon_reload: yes
+        name: network
+    - name: configuring hosts file
+      blockinfile:
+        dest: /etc/hosts
+        block: |
+         10.136.101.143 cl2.got.com cl2
+    - name: setting the hostname
+      command: hostnamectl set-hostname cl2.got.com

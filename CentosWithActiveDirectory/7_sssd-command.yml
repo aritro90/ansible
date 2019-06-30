@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Configuring sssd
+      command: "{{item}}"
+      with_items:
+         - chown root:root /etc/sssd/sssd.conf
+         - chmod 0600 /etc/sssd/sssd.conf
+         - restorecon /etc/sssd/sssd.conf
+         - authconfig --enablesssd --enablesssdauth --enablemkhomedir --update
+    - name: starting sssd
+      systemd:
+        name: sssd
+        state: started
+    - name: enabling sssd
+      systemd:
+        name: sssd
+        enabled: yes
+        masked: no

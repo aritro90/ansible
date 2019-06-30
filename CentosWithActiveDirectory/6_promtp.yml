@@ -1,0 +1,47 @@
+---
+- hosts: all
+  become: true
+  vars_prompt:
+    - name: "ADUSER"
+      prompt: "Enter AD user"
+      private: no
+    - name: "Password"
+      prompt: "Enter password"
+      private: yes
+  tasks:
+    - name: Generating the kerberos ticket for the entered user"
+      shell: echo {{ vars.Password }} | kinit {{ vars.ADUSER }}
+    - name: listing the keytab
+      command: klist
+      register: klist
+    - name: The klist is as below
+      debug: 
+        msg: "{{ klist }}"
+    - name: Joining centos client to AD (windows server)
+      shell: echo {{ vars.Password }} | net ads join -S AD.GOT.COM -U {{ vars.ADUSER }}
+    - name: testing domain join
+      command: net ads testjoin
+      register: testjoin
+    - name: Debug message for testjoin
+      debug:
+        msg: "{{ testjoin }}"
+    - name: domain join status
+      command: net ads status -P
+      register: statustest
+    - name: debug message for domain join status
+      debug:
+        msg: "{{ statustest }}"
+    - name: getting domain info
+      command: net ads info
+      register: infodomain
+    - name: debug message for domain information
+      debug:
+        msg: "{{ infodomain }}"
+    - name: Generating the keytab for the entered user"
+      shell: echo {{ vars.Password }} | net ads keytab create -U {{ vars.ADUSER }}
+    - name: Listing the keytab file for the user
+      command: klist -Kke
+      register: keytab
+    - name: Keytab information below
+      debug:
+        msg: "{{ keytab }}"

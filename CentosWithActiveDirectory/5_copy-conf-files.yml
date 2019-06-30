@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: copying smb conf file
+      copy:
+        src: ./config/smb.conf
+        dest: /etc/samba/
+        backup: yes
+    - name: copying krb5 conf file
+      copy:
+        src: ./config/krb5.conf
+        dest: /etc/
+        backup: yes
+    - name: copying sssd conf file
+      copy:
+        src: ./config/sssd.conf
+        dest: /etc/sssd/

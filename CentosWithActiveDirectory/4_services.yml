@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: starting Services
+      systemd:
+        name: smb
+        state: started
+    - name: enable smb
+      systemd:
+        name: smb
+        enabled: yes
+        masked: no
+    - name: Starting ntpdate
+      systemd:
+        name: ntpdate
+        state: started
+    - name: starting ntpd
+      systemd:
+        name: ntpd
+        state: started
+    - name: enable ntpdate
+      systemd:
+        name: ntpdate
+        enabled: yes
+        masked: no
+    - name: enable ntpd
+      systemd:
+        name: ntpd
+        enabled: yes
+        masked: no

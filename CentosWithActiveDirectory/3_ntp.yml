@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: stopping ntpd
+      systemd:
+        name: ntpd
+        state: stopped 
+    - name: removing lines from ntp.conf
+      replace:
+        path: /etc/ntp.conf
+        regexp: '^server'
+        replace: '#server'
+        backup: yes
+    - name: updating ntp.conf with ntp server
+      lineinfile:
+        path: /etc/ntp.conf
+        insertafter: '#server'
+        line: server 10.136.101.234
+    - name: updating ntp server configuration with ntpdate command
+      command: ntpdate -v -b 10.136.101.234
