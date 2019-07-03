@@ -2,25 +2,30 @@
 - hosts: all
   become: true
   tasks:
-    - name: updating onboot to yes
-      replace:
-        path: /etc/sysconfig/network-scripts/ifcfg-eth0
-        regexp: '^ONBOOT=no'
-        replace: 'ONBOOT=yes'
-    - name: settting bootproto to static
+    - name: install needed network manager libs
+      package:
+       name:
+        - NetworkManager-glib
+        - nm-connection-editor
+        - libsemanage-python
+        - policycoreutils-python
+       state: present
+    - name: configuring network
+      nmcli:
+       type: ethernet
+       conn_name: eth0
+       ifname: eth0
+       ip4: 10.136.101.143/24
+       gw4: 10.136.101.1
+       dns4: 10.136.101.234
+       dns4_search: got.com
+       autoconnect: yes
+       state: present
+    - name: updating bootproto to static
       replace:
         path: /etc/sysconfig/network-scripts/ifcfg-eth0
         regexp: '^BOOTPROTO=dhcp'
-        replace: 'BOOTPROTO=static'
-    - name: configuring network
-      blockinfile:
-        dest: /etc/sysconfig/network-scripts/ifcfg-eth0
-        block: |
-         IPADDR=10.136.101.143
-         NETMASK=255.255.255.0
-         GATEWAY=10.136.101.1
-         DOMAIN=got.com
-         DNS1=10.136.101.234
+        replace: 'BOOTPROTO=static' 
     - name: restart network service
       systemd:
         state: restarted
