@@ -1,10 +1,12 @@
 #!/bin/bash
 while [ "$choice" != "y" ]
 do
+  echo "Enter Client IP interface name (e.g eth0)"
+  read -p 'Interface name' IP_ETH
   echo Enter IP address client machine
   read -p 'IP Address: ' IP_ADD
   echo Enter network prefix
-  read -p 'Prefix: ' IP_prefix
+  read -p 'Prefix: ' IP_PREFIX
   echo Enter gateway IP
   read -p 'Gateway IP : ' IP_GW
   echo Enter DNS IP
@@ -20,9 +22,10 @@ do
   echo "=========================================="
   echo "=========================================="
   echo "=========================================="
+  echo Client IP interface name : $IP_ETH
   echo CLient Machine IP : $IP_ADD
-  echo Network prefix : $IP_prefix
-  echo Gateway IP : $IP_gw
+  echo Network prefix : $IP_PREFIX
+  echo Gateway IP : $IP_GW
   echo DNS IP : $IP_DNS
   echo Domain : $IP_DOM
   echo Active Directory hostname : $IP_HOST
