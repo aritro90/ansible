@@ -18,7 +18,7 @@
       debug: 
         msg: "{{ klist }}"
     - name: Joining centos client to AD (windows server)
-      shell: echo {{ vars.Password }} | net ads join -S AD.GOT.COM -U {{ vars.ADUSER }}
+      shell: echo {{ vars.Password }} | net ads join -S {{ IP_HOST_DOM_UPPER }} -U {{ vars.ADUSER }}
     - name: testing domain join
       command: net ads testjoin
       register: testjoin

@@ -13,17 +13,17 @@
     - name: configuring network
       nmcli:
        type: ethernet
-       conn_name: eth0
-       ifname: eth0
-       ip4: 10.136.101.143/24
-       gw4: 10.136.101.1
-       dns4: 10.136.101.234
-       dns4_search: got.com
+       conn_name: "{{ IP_ETH }}"
+       ifname: "{{ IP_ETH }}"
+       ip4: "{{ IP_ADD_WITH_PREFIX }}"
+       gw4: "{{ IP_GW }}"
+       dns4: "{{ IP_DNS }}"
+       dns4_search: "{{ IP_DOM }}"
        autoconnect: yes
        state: present
     - name: updating bootproto to static
       replace:
-        path: /etc/sysconfig/network-scripts/ifcfg-eth0
+        path: /etc/sysconfig/network-scripts/ifcfg-{{ IP_ETH }}
         regexp: '^BOOTPROTO=dhcp'
         replace: 'BOOTPROTO=static' 
     - name: restart network service
@@ -35,6 +35,6 @@
       blockinfile:
         dest: /etc/hosts
         block: |
-         10.136.101.143 cl2.got.com cl2
+         {{ IP_ADD }} {{ IP_CLIENT_FQDN }} {{ IP_CLIENT }}
     - name: setting the hostname
-      command: hostnamectl set-hostname cl2.got.com
+      command: hostnamectl set-hostname {{ IP_CLIENT_FQDN }}

@@ -16,6 +16,6 @@
       lineinfile:
         path: /etc/ntp.conf
         insertafter: '#server'
-        line: server 10.136.101.234
+        line: server {{ IP_NTP }}
     - name: updating ntp server configuration with ntpdate command
-      command: ntpdate -v -b 10.136.101.234
+      command: ntpdate -v -b {{ IP_NTP }}
