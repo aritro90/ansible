@@ -5,10 +5,10 @@ Create a centos 7 VM with DHCP enable (this will be your NFS client machine), lo
 Set the ssh keys auth for the NFS client from the base machine (where you will run the ansible playbooks). Below command needs to be excuted from the base machine  
 `ssh-copy-id root@IP-of-client-machine `  
 
-Install Ansible on the Base machine (if Centos) as below:  
-`sudo yum -y install epel-release   
+Install Ansible on the Base machine (if Centos) as below:   
+```sudo yum -y install epel-release   
 sudo yum -y install ansible  
-sudo yum -y install python3* `  
+sudo yum -y install python3* ``` 
 
 Once the above has been installed navigate to CentosWithActiveDirectory Dierctory(downloaded git project). Make sure you are inside the directory  
 Execute `python ./input.py` 
